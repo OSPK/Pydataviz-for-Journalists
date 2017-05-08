@@ -4,20 +4,26 @@
 <h1>Home page</h1>
 
 <div class="container">
-	<div class="row">
+	
 		{% for post in posts%}
-			<div class="col-md-4 text-center">
-				{% set id = post.id|string %}
-				<a href="/chart/{{post.id}}">
-					<img class="img-responsive" src="{{ url_for('static', filename='charts/'+id+'.svg') }}" alt="{{post.title}}">
-					<h3>{{post.title}}</h3>
-					<form action="{{url_for('delete', id=post.id)}}" method=POST>
-						<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-						<button class="btn btn-danger btn-xs pull-right">Delete</button>
-					</form>
-				</a>
-			</div>
+			{% if loop.index%3 == 1%}
+			<div class="row">
+			{% endif %}
+				<div class="col-md-4 text-center">
+					{% set id = post.id|string %}
+					<a href="/chart/{{post.id}}">
+						<img class="img-responsive" src="{{ url_for('static', filename='charts/'+id+'.svg') }}" alt="{{post.title}}">
+						<h3>{{post.title}}</h3>
+						<form action="{{url_for('delete', id=post.id)}}" method=POST>
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+							<button class="btn btn-danger btn-xs pull-right">Delete</button>
+						</form>
+					</a>
+				</div>
+			{% if loop.index%3 == 0%}
+			</div><br>
+			{% endif %}
 		{% endfor %}
-	</div>
+
 </div>
 {% endblock %}
