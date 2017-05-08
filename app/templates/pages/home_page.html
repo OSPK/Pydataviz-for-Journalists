@@ -14,11 +14,11 @@
 					<a href="/chart/{{post.id}}">
 						<img class="img-responsive" src="{{ url_for('static', filename='charts/'+id+'.svg') }}" alt="{{post.title}}">
 						<h3>{{post.title}}</h3>
-						<form action="{{url_for('delete', id=post.id)}}" method=POST>
-							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-							<button class="btn btn-danger btn-xs pull-right">Delete</button>
-						</form>
 					</a>
+					<form action="{{url_for('delete', id=post.id)}}" method=POST>
+						<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+						<button class="btn btn-danger btn-xs pull-right">Delete</button>
+					</form>
 				</div>
 			{% if loop.index%3 == 0%}
 			</div><br>
