@@ -60,7 +60,7 @@ def chart(id):
     data = json.loads(post.data)
     title = post.title
     chart_type = post.chart_type
-    pyconfig.js = [site+'/static/js/pygal-tooltips.min.js']
+    pyconfig.js = ['https://en.dailypakistan.com.pk/wp-content/themes/century/js/pygal-tooltips.min.js']
     pyconfig.legend_at_bottom=True
     pyconfig.legend_at_bottom_columns=1
     pyconfig.stroke_style={'width': 3}
