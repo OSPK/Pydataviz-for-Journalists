@@ -97,6 +97,14 @@ def chart(id):
                 continue
             chart.add(data['result'][idx][0], data['result'][idx][1:])
 
+    elif chart_type == 'donut':
+        pyconfig.inner_radius = 0.5
+        chart = pygal.Pie(pyconfig)
+        for idx,item in enumerate(data['result']):
+            if idx == 0:
+                continue
+            chart.add(data['result'][idx][0], data['result'][idx][1:])
+
     else:
         chart = pygal.Line()
 
