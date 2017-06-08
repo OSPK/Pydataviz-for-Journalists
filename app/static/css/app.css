@@ -11,3 +11,22 @@ hr { border-color: #cccccc; margin: 0px; }
 .with-margins { margin: 10px; }
 
 .col-centered { float: none; margin: 0 auto; }
+
+.map-modal .modal-lg {
+    width: 100%;
+    margin:0px;
+}
+.close {
+	color: #ffffff;
+    background: black;
+}
+.modal-header {
+    border-bottom: 1px solid #444444;
+}
+.modal-footer {
+    border-top: 1px solid #444444;
+}
+.map-modal .modal-content {
+	background-color: rgba(0, 0, 0, 0.65);
+	color:white;
+}
