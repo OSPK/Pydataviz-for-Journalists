@@ -43,10 +43,13 @@
                 </div>
             </div>
             <div class="with-margins">
+                <span class='h3'><a href="{{ url_for('home_page') }}">Charts</a></span>
+                &nbsp; | &nbsp; <span class='h3'><a href="{{ url_for('maps') }}">Maps</a></span>
+            </div>
+            <div class="with-margins">
                 <a href="{{ url_for('home_page') }}">Home</a>
                 &nbsp; | &nbsp; <a href="{{ url_for('new_page') }}">New Chart</a>
-                &nbsp; | &nbsp; <a href="{{ url_for('maps_page') }}">Map South Asia</a>
-                &nbsp; | &nbsp; <a href="{{ url_for('maps_pk_page') }}">Map Pakistan</a>
+                &nbsp; | &nbsp; <a href="{{ url_for('new_map') }}">New Map</a>
             </div>
             <hr class="no-margins"/>
 
@@ -82,7 +85,7 @@
             <!-- Bootstrap JS -->
             <script src="{{ url_for('static', filename='bootstrap/js/jquery.min.js') }}"></script>
             <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
-
+            {% block footer_scripts %}{% endblock %}
             <!-- Optional Google Analytics: change UA-XXXXX-X to be your site's ID.
             <script>
                 (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

@@ -1,0 +1,60 @@
+{% extends "common/page_base.html" %}  {# common/page_base.html extends layout.html #}
+
+{% block content %}
+<h1>Add Map</h1>
+<div class="row">
+	<div class="col-md-12">
+		<form action="" method=post enctype=multipart/form-data><p>
+			<input class="form-control" name="title" value="" placeholder="Map Title"/>
+			<textarea name="description" class="form-control" rows="4" cols="50" placeholder="Map Description"></textarea>
+			<select class="form-control region" name="region">
+			  <option value=".pakistan" selected>Pakistan</option>
+			  <option value=".south-asia">South Asia</option>
+			</select>
+			<div class="pakistan map_regions">
+				{% for province in pk_province_list %}
+					<div class="col-md-6">
+						{% for initials, name in province.items()%}
+							<h3>{{name}}</h3>
+							<select name="{{initials}}" class="form-control" multiple>
+								{% for post in posts%}
+									<option value="{{post.id}}">{{post.title}}</option>
+								{% endfor %}
+							</select>
+						{% endfor %}
+					</div>
+				{% endfor %}
+			</div>
+			<div class="south-asia map_regions" hidden>
+				{% for country in sa_region_list %}
+					<div class="col-md-6">
+						{% for initials, name in country.items()%}
+							<h3>{{name}}</h3>
+							<select name="{{initials}}" class="form-control" multiple>
+								{% for post in posts%}
+									<option value="{{post.id}}">{{post.title}}</option>
+								{% endfor %}
+							</select>
+						{% endfor %}
+					</div>
+				{% endfor %}
+			</div>
+			<hr>&nbsp;
+			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+			<br>
+			<input class="btn btn-primary btn-block" type="submit" value="Submit">
+		</form>
+	</div>
+</div>
+{% endblock %}
+
+{% block footer_scripts %}
+<script>
+$( document ).ready(function() {
+    $('select.region').on('change', function() {
+	  $('.map_regions').hide();
+	  $(this.value).show();
+	})
+});
+</script>
+{% endblock %}

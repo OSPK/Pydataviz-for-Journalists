@@ -5,7 +5,7 @@ from flask import redirect, render_template, render_template_string, Blueprint
 from flask import request, url_for, jsonify
 from flask_user import current_user, login_required, roles_accepted
 from app.init_app import app, db, cache
-from app.models import UserProfileForm, Post
+from app.models import UserProfileForm, Post, Map
 import flask_excel as excel
 import pygal
 from pygal.style import Style
@@ -13,6 +13,13 @@ import json
 from tempfile import NamedTemporaryFile
 
 pyconfig = pygal.Config()
+
+@app.before_request
+def before_request():
+    # When you import jinja2 macros, they get cached which is annoying for local
+    # development, so wipe the cache every request.
+    if 'localhost' in request.host_url or '0.0.0.0' in request.host_url:
+        app.jinja_env.cache = {}
 
 custom_css = '''
     {{id}} {
@@ -73,6 +80,40 @@ custom_css = '''
     }
 '''
 
+sa_region_list = [
+        {'AF':'Afghanistan'},
+        {'PK':'Pakistan'},
+        {'IN':'India'},
+        {'NP':'Nepal'},
+        {'BD':'Bangladesh'},
+        {'LK':'Sri Lanka'}
+    ]
+pk_province_list = [
+    {'PK-BA':'Balochistan'},
+    {'PK-GB':'Gilgit Baltistan'},
+    {'PK-IS':'Islamabad Capital Territory'},
+    {'PK-JK':'Azad Kahsmir'},
+    {'PK-KP':'Khyber Pakhtunkhwah'},
+    {'PK-PB':'Punjab'},
+    {'PK-SD':'Sindh'},
+    {'PK-TA':'FATA'},
+]
+regions_dict = {
+    'AF':'Afghanistan',
+    'PK':'Pakistan',
+    'IN':'India',
+    'NP':'Nepal',
+    'BD':'Bangladesh',
+    'LK':'Sri Lanka',
+    'PK-BA':'Balochistan',
+    'PK-GB':'Gilgit Baltistan',
+    'PK-IS':'Islamabad Capital Territory',
+    'PK-JK':'Azad Kahsmir',
+    'PK-KP':'Khyber Pakhtunkhwah',
+    'PK-PB':'Punjab',
+    'PK-SD':'Sindh',
+    'PK-TA':'FATA',
+}
 @cache.memoize(50)
 def chart_func(id, legend=False):
     site = request.url.split('/chart/')[0]
@@ -156,6 +197,7 @@ app.jinja_env.globals.update(chart_func=chart_func)
 
 # The Home page is accessible to anyone
 @app.route('/')
+@roles_accepted('admin')
 def home_page():
     posts = Post.query.all()
     return render_template('pages/home_page.html', posts=posts)
@@ -192,8 +234,40 @@ def new_page():
 
     return render_template('pages/new.html')
 
+
+@app.route('/new_map', methods=['GET', 'POST'])
+@roles_accepted('admin')
+def new_map():
+    posts = Post.query.with_entities(Post.title, Post.id).order_by(Post.id.desc()).all()
+    
+    if request.method == 'POST':
+        title = request.form.get("title")
+        description = request.form.get("description")
+        region = request.form.get("region")
+        region = region.split('.')[1]
+        data = {}
+        if region == 'south-asia':
+            for country in sa_region_list:
+                for initials, name in country.items():
+                    data[initials] = request.form.getlist(initials)
+
+        if region == 'pakistan':
+            for province in pk_province_list:
+                for initials, name in province.items():
+                    data[initials] = request.form.getlist(initials)
+
+        entry = Map(title, description, region, json.dumps(data))
+        db.session.add(entry)
+        db.session.commit()
+        id = entry.id
+        return redirect(url_for('map', id=id))
+
+    return render_template('pages/new_map.html', posts=posts, sa_region_list=sa_region_list, pk_province_list=pk_province_list)
+
+
 # The Admin page is accessible to users with the 'admin' role
 @app.route('/chart/<int:id>')
+@roles_accepted('admin')
 def chart(id):
     site = request.url
     post = Post.query.get(id)
@@ -204,10 +278,6 @@ def chart(id):
 
     return render_template('pages/chart.html', data=data, title=title, id=str(id), embed=embed, embed_code=embed_code)
 
-
-@app.route('/chart/<int:id>/embed')
-def chart_embed(id):
-    return chart_func(id, legend=True)
 
 
 @app.route('/delete/<int:id>', methods=['POST'])
@@ -240,13 +310,50 @@ def user_profile_page():
     return render_template('pages/user_profile_page.html',
                            form=form)
 
-# The Admin page is accessible to users with the 'admin' role
-@app.route('/maps')
-def maps_page():
-    return render_template('pages/maps.html')
 
+@app.route('/maps')
+@roles_accepted('admin')
+def maps():
+    maps = Map.query.all()
+    return render_template('pages/maps.html', maps=maps)
+
+
+@app.route('/map/<int:id>')
+@roles_accepted('admin')
+def map(id):
+    site = request.url
+    post = Map.query.get(id)
+    data = post.data
+    json_acceptable_string = data.replace("'", "\"")
+    data = json.loads(json_acceptable_string)
+    embed = "<script>function resizeIframe(obj) {obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';}</script><iframe style='width:100%;' onload='resizeIframe(this)' src='"+site+"/embed' frameborder='0'></iframe>"
+    return render_template('pages/map.html', post=post, data=data, regions_dict=regions_dict, embed=embed)
+
+
+@app.route('/delete/map/<int:id>', methods=['POST'])
+@roles_accepted('admin')
+def delete_map(id):
+    map = Map.query.get(id)
+    db.session.delete(map)
+    db.session.commit()
+
+    return redirect(url_for('maps'))
 
 # The Admin page is accessible to users with the 'admin' role
 @app.route('/maps/pk')
 def maps_pk_page():
     return render_template('pages/maps-pk.html')
+
+
+@app.route('/chart/<int:id>/embed')
+def chart_embed(id):
+    return chart_func(id, legend=True)
+
+
+@app.route('/map/<int:id>/embed')
+def map_embed(id):
+    post = Map.query.get(id)
+    data = post.data
+    json_acceptable_string = data.replace("'", "\"")
+    data = json.loads(json_acceptable_string)
+    return render_template('pages/map_embed.html', post=post, data=data, regions_dict=regions_dict)

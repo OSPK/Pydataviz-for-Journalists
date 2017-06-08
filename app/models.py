@@ -42,6 +42,22 @@ class Post(db.Model):
         self.chart_type = chart_type
         self.data = data
 
+
+class Map(db.Model):
+    __tablename__ = 'maps'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Unicode(255), nullable=False, server_default=u'')
+    description = db.Column(db.Unicode(1512), nullable=False, server_default=u'')
+    region = db.Column(db.Unicode(255), nullable=False, server_default=u'')
+    data = db.Column(db.Unicode(2255), nullable=False, server_default=u'')
+
+    def __init__(self, title, description, region, data):
+        self.title = title
+        self.description = description
+        self.region = region
+        self.data = data
+
+
 # Define the Role data model
 class Role(db.Model):
     __tablename__ = 'roles'
