@@ -25,7 +25,7 @@ custom_css = '''
     {{id}} {
         background-color: rgba(249, 249, 249, 0);
     }
-    {{ id }}text {
+    {{ id }} text {
         fill: green;
         font-family: sans-serif;
         font-size:1rem;
@@ -36,18 +36,21 @@ custom_css = '''
         font-family: sans-serif;
         font-weight: bold;
     }
-    {{ id }}.legends .legend text {
-        font-size: 15px;;
+    {{ id }} .legends .legend text {
+        font-size: 1.2rem;
     }
-    {{ id }}.axis {
+    {{ id }} .axis {
         stroke: #666;
     }
     {{ id }} .axis .guides:hover text {
         fill: rgb(86, 230, 82);
     }
-    {{ id }}.axis text {
-        font-size: 17px;
+    {{ id }} .axis text {
+        font-size: 1.2rem;
         fill: #afafaf;
+    }
+    {{ id }} .axis .guide.line {
+        stroke: rgba(206, 206, 206, 0.54);
     }
     {{ id }} .axis text.major {
         font-size: 20px;
@@ -60,8 +63,8 @@ custom_css = '''
         fill: rgb(255, 255, 255);
         stroke: #2d2d2d;
     }
-    {{ id }}#tooltip text {
-        font-size: 25px;
+    {{ id }} #tooltip text {
+        font-size: 1.5rem;
     }
     {{ id }} .tooltip .legend {
         font-size: 1.8rem;
@@ -177,6 +180,7 @@ def chart_func(id, legend=False):
                 chart.add(data['result'][idx][0], data['result'][idx][1:])
 
         elif chart_type == 'radar':
+            pyconfig.show_legend = True
             chart = pygal.Radar(pyconfig)
             chart.x_labels = data['result'][0][1:]
             for idx,item in enumerate(data['result']):
