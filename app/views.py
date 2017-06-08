@@ -121,6 +121,7 @@ def chart_func(id, legend=False):
                 chart.add(data['result'][idx][0], data['result'][idx][1:])
 
         elif chart_type == 'pie':
+            pyconfig.inner_radius = 0
             chart = pygal.Pie(pyconfig)
             for idx,item in enumerate(data['result']):
                 if idx == 0:
