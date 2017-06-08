@@ -1,12 +1,10 @@
 # Copyright 2014 SolidBuilds.com. All rights reserved
 #
 # Authors: Ling Thio <ling.thio@gmail.com>
-
-
 from flask import redirect, render_template, render_template_string, Blueprint
 from flask import request, url_for, jsonify
 from flask_user import current_user, login_required, roles_accepted
-from app.init_app import app, db
+from app.init_app import app, db, cache
 from app.models import UserProfileForm, Post
 import flask_excel as excel
 import pygal
@@ -75,6 +73,7 @@ custom_css = '''
     }
 '''
 
+@cache.memoize(50)
 def chart_func(id, legend=False):
     site = request.url.split('/chart/')[0]
     post = Post.query.get(id)
@@ -241,6 +240,11 @@ def user_profile_page():
 
 # The Admin page is accessible to users with the 'admin' role
 @app.route('/maps')
-@roles_accepted('admin')  # Limits access to users with the 'admin' role
 def maps_page():
     return render_template('pages/maps.html')
+
+
+# The Admin page is accessible to users with the 'admin' role
+@app.route('/maps/pk')
+def maps_pk_page():
+    return render_template('pages/maps-pk.html')

@@ -10,10 +10,12 @@ from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import UserManager, SQLAlchemyAdapter
 from flask_wtf.csrf import CsrfProtect
+from flask.ext.cache import Cache
 
 app = Flask(__name__)           # The WSGI compliant web application object
 db = SQLAlchemy()               # Setup Flask-SQLAlchemy
 manager = Manager(app)          # Setup Flask-Script
+cache = Cache(app,config={'CACHE_TYPE': 'simple'}) #Cache
 
 # Initialize Flask Application
 def init_app(app, extra_config_settings={}):
