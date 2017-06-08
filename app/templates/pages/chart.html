@@ -12,7 +12,7 @@
 		<h3>Data</h3>
 		{{data}}
 		<h3>Embed</h3>
-		<pre>{{embed}}</pre>
+		<pre>{{embed_code}}</pre>
 		<div class="row well">
 		<form action="{{url_for('delete', id=id)}}" method=POST>
 			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>

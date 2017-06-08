@@ -195,17 +195,19 @@ def new_page():
 # The Admin page is accessible to users with the 'admin' role
 @app.route('/chart/<int:id>')
 def chart(id):
+    site = request.url
     post = Post.query.get(id)
     data = json.loads(post.data)
     title = post.title
     embed = chart_func(id, legend=True)
+    embed_code = "<script>function resizeIframe(obj) {obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';}</script><iframe style='width:100%;' onload='resizeIframe(this)' src='"+site+"/embed' frameborder='0'></iframe>"
 
-    return render_template('pages/chart.html', data=data, title=title, id=str(id), embed=embed)
+    return render_template('pages/chart.html', data=data, title=title, id=str(id), embed=embed, embed_code=embed_code)
 
 
 @app.route('/chart/<int:id>/embed')
 def chart_embed(id):
-    return chart_func(id)
+    return chart_func(id, legend=True)
 
 
 @app.route('/delete/<int:id>', methods=['POST'])
