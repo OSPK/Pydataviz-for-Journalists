@@ -141,7 +141,10 @@ def chart_func(id, legend=False):
         chart.title = title
 
         xchart = chart.render_data_uri()
-        chart.render_to_file('app/static/charts/{}_embed.svg'.format(id))
+        if legend is False:
+            chart.render_to_file('app/static/charts/{}_embed.svg'.format(id))
+        else:
+            chart.render_to_file('app/static/charts/{}.svg'.format(id))
 
         embed = '<embed type="image/svg+xml" src="{}">'.format(xchart)
 
