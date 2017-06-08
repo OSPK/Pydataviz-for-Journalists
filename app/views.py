@@ -342,7 +342,7 @@ def delete_map(id):
 # The Admin page is accessible to users with the 'admin' role
 @app.route('/maps/pk')
 def maps_pk_page():
-    return render_template('pages/maps-pk.html')
+    return redirect(url_for('map', id=1))
 
 
 @app.route('/chart/<int:id>/embed')
