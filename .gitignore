@@ -67,4 +67,5 @@ target/
 .idea/
 app.sqlite
 app/local_settings.py
-
+app/static/charts/
+app/static/charts/*
