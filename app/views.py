@@ -47,7 +47,7 @@ custom_css = '''
     }
     {{ id }}.axis text {
         font-size: 17px;
-        fill: rgb(251, 251, 251);
+        fill: #afafaf;
     }
     {{ id }} .axis text.major {
         font-size: 20px;
@@ -171,6 +171,14 @@ def chart_func(id, legend=False):
         elif chart_type == 'donut':
             pyconfig.inner_radius = 0.5
             chart = pygal.Pie(pyconfig)
+            for idx,item in enumerate(data['result']):
+                if idx == 0:
+                    continue
+                chart.add(data['result'][idx][0], data['result'][idx][1:])
+
+        elif chart_type == 'radar':
+            chart = pygal.Radar(pyconfig)
+            chart.x_labels = data['result'][0][1:]
             for idx,item in enumerate(data['result']):
                 if idx == 0:
                     continue
