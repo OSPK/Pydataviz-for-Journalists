@@ -286,7 +286,7 @@ def chart(id):
     data = json.loads(post.data)
     title = post.title
     embed = chart_func(id, legend=True)
-    embed_code = "<script>function resizeIframe(obj) {obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';}</script><iframe class='vis' scrolling='no' style='width:100%;' onload='resizeIframe(this)' src='"+site+"/embed' frameborder='0'></iframe>"
+    embed_code = "<iframe class='vis' scrolling='no' style='width:100%;' onload='resizeIframe(this)' src='"+site+"/embed' frameborder='0'></iframe>"
 
     return render_template('pages/chart.html', data=data, title=title, id=str(id), embed=embed, embed_code=embed_code)
 
@@ -338,7 +338,7 @@ def map(id):
     data = post.data
     json_acceptable_string = data.replace("'", "\"")
     data = json.loads(json_acceptable_string)
-    embed = "<script>function resizeIframe(obj) {obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';}</script><iframe class='vis' scrolling='no' style='width:100%;' onload='resizeIframe(this)' src='"+site+"/embed' frameborder='0'></iframe>"
+    embed = "<iframe class='vis' scrolling='no' style='width:100%;' onload='resizeIframe(this)' src='"+site+"/embed' frameborder='0'></iframe>"
     return render_template('pages/map.html', post=post, data=data, regions_dict=regions_dict, embed=embed)
 
 
