@@ -31,8 +31,7 @@ custom_css = '''
         font-size:1rem;
     }
     {{ id }} .title {
-        font-size: 2rem;
-        line-height: 3rem;
+        font-size: 1rem;
         fill: #35baf6;
         font-family: sans-serif;
         font-weight: bold;
