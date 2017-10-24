@@ -1,0 +1,12 @@
+{% extends "common/embed_base.html" %}  {# common/page_base.html extends layout.html #}
+
+{% block content %}
+<h1>{{title}}</h1>
+
+<div class="row">
+	<div class="col-md-12">
+		{{embed | safe}}
+	</div>
+</div>
+
+{% endblock %}

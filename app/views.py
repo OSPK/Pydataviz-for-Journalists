@@ -359,7 +359,8 @@ def maps_pk_page():
 
 @app.route('/chart/<int:id>/embed')
 def chart_embed(id):
-    return chart_func(id, legend=True)
+    embed = chart_func(id, legend=True)
+    return render_template('pages/embed.html', embed=embed)
 
 
 @app.route('/map/<int:id>/embed')
