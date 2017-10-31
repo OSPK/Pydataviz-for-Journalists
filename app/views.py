@@ -343,7 +343,7 @@ def map(id):
     json_acceptable_string = data.replace("'", "\"")
     data = json.loads(json_acceptable_string)
     embed = "<iframe class='vis' scrolling='no' style='width:100%;' onload='resizeIframe(this)' src='"+site+"/embed' frameborder='0'></iframe>"
-    return render_template('pages/map.html', post=post, data=data, regions_dict=regions_dict, embed=embed)
+    return render_template('pages/map.html', post=post, data=data, regions_dict=regions_dict, embed=embed, id=id)
 
 
 @app.route('/delete/map/<int:id>', methods=['POST'])
