@@ -49,6 +49,10 @@ custom_css = '''
         font-size: 1.2rem;
         fill: #afafaf;
     }
+    {{ id }} .radar-graph .axis text {
+        font-size: 4px;
+        fill: #afafaf;
+    }
     {{ id }} .axis .guide.line {
         stroke: rgba(206, 206, 206, 0.54);
     }
