@@ -30,6 +30,11 @@ custom_css = '''
         font-family: sans-serif;
         font-size:1rem;
     }
+    {{ id }} text {
+        fill: green;
+        font-family: sans-serif;
+        font-size:1rem;
+    }
     {{ id }} .title {
         font-size: 1rem;
         fill: #35baf6;
@@ -46,7 +51,7 @@ custom_css = '''
         fill: rgb(86, 230, 82);
     }
     {{ id }} .axis text {
-        font-size: 1.2rem;
+        font-size: 0.7rem;
         fill: #afafaf;
     }
     {{ id }} .radar-graph .axis text {
@@ -178,6 +183,14 @@ def chart_func(id, legend=False):
         elif chart_type == 'donut':
             pyconfig.inner_radius = 0.5
             chart = pygal.Pie(pyconfig)
+            for idx,item in enumerate(data['result']):
+                if idx == 0:
+                    continue
+                chart.add(data['result'][idx][0], data['result'][idx][1:])
+
+        elif chart_type == 'treemap':
+            pyconfig.inner_radius = 0.5
+            chart = pygal.Treemap(pyconfig)
             for idx,item in enumerate(data['result']):
                 if idx == 0:
                     continue
