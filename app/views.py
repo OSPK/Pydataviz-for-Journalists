@@ -55,7 +55,7 @@ custom_css = '''
         fill: #afafaf;
     }
     {{ id }} .radar-graph .axis text {
-        font-size: 4px;
+        font-size: 8px;
         fill: #afafaf;
     }
     {{ id }} .axis .guide.line {
@@ -155,9 +155,26 @@ def chart_func(id, legend=False):
                     continue
                 chart.add(data['result'][idx][0], data['result'][idx][1:])
 
+        if chart_type == 'stackedline':
+            pyconfig.fill = True
+            chart = pygal.StackedLine(pyconfig)
+            chart.x_labels = data['result'][0][1:]
+            for idx,item in enumerate(data['result']):
+                if idx == 0:
+                    continue
+                chart.add(data['result'][idx][0], data['result'][idx][1:])
+
 
         elif chart_type == 'bar':
             chart = pygal.Bar(pyconfig)
+            chart.x_labels = data['result'][0][1:]
+            for idx,item in enumerate(data['result']):
+                if idx == 0:
+                    continue
+                chart.add(data['result'][idx][0], data['result'][idx][1:])
+
+        elif chart_type == 'stackedbar':
+            chart = pygal.StackedBar(pyconfig)
             chart.x_labels = data['result'][0][1:]
             for idx,item in enumerate(data['result']):
                 if idx == 0:
