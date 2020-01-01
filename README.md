@@ -1,22 +1,6 @@
-# Flask-User starter app
+# Data Visualization tool for Journalists
+Includes Maps for Pakistan and South Asia
 
-This code base serves as a great starting point to write your next Flask application  
-(With or without Flask-User)
-
-## Developer benefits
-* Tested on Python 2.7, 3.3, and 3.4
-* Well organized directories with lots of comments
-  * app/models
-  * app/startup
-  * app/views
-* HTML5 BoilerPlate / jQuery / Bootstrap layout template
-* Few dependencies (Flask-SQLAlchemy, Flask-WTF, Flask-User, Flask-Migrate)
-* Includes Flask-User user management
-  * Register, Confirm email, Login, Logout
-  * Change username/email/password, Forgot password
-* SMTPHandler for error-level log messages -- sends emails on unhandled exceptions
-* Includes `py.test` test framework
-* Includes `alembic` database migration framework
 
 
 ## Cloning the code base
