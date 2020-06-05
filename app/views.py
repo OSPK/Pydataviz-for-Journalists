@@ -9,6 +9,7 @@ from app.models import UserProfileForm, Post, Map
 import flask_excel as excel
 import pygal
 from pygal.style import Style
+from pygal.style import RedBlueStyle
 import json
 from tempfile import NamedTemporaryFile
 
@@ -27,22 +28,23 @@ custom_css = '''
     }
     {{ id }} text {
         fill: green;
-        font-family: sans-serif;
+        font-family: 'Dosis',sans-serif;
         font-size:1rem;
     }
     {{ id }} text {
         fill: green;
-        font-family: sans-serif;
+        font-family: 'Dosis',sans-serif;
         font-size:1rem;
     }
     {{ id }} .title {
-        font-size: 1rem;
-        fill: #35baf6;
-        font-family: sans-serif;
-        font-weight: bold;
+        font-size: 1.4rem;
+        fill: #5d5a58;
+        font-family: 'Dosis', sans-serif;
+        font-weight: 700;
     }
     {{ id }} .legends .legend text {
-        font-size: 1.2rem;
+        font-size: 1rem;
+        font-family: 'Dosis',sans-serif;
     }
     {{ id }} .axis {
         stroke: #666;
@@ -52,7 +54,7 @@ custom_css = '''
     }
     {{ id }} .axis text {
         font-size: 0.7rem;
-        fill: #afafaf;
+        fill: #484848;
     }
     {{ id }} .radar-graph .axis text {
         font-size: 8px;
@@ -69,20 +71,21 @@ custom_css = '''
         text-anchor: end;
     }
     {{ id }} .tooltip rect {
-        fill: rgb(255, 255, 255);
-        stroke: #2d2d2d;
+        fill: rgba(249, 242, 217, 0.9);
+        stroke: #2f2f2f4d;
     }
     {{ id }} #tooltip text {
-        font-size: 1.5rem;
+        font-size: 0.8rem;
     }
     {{ id }} .tooltip .legend {
-        font-size: 1.8rem;
+        font-size: 0.8rem;
+        fill: rgba(0, 0, 0, 0.79);
     }
     {{ id }} .tooltip .value {
-        font-size: 1.5rem;
+        font-size: 0.8rem;
     }
     {{ id }} .tooltip .x_label {
-        font-size: 1em;
+        font-size: 0.7em;
     }
     {{ id }} .graph > .background {
         fill: rgba(249, 249, 249, 0);
@@ -134,10 +137,12 @@ def chart_func(id, legend=False):
         data = json.loads(post.data)
         title = post.title
         chart_type = post.chart_type
-        pyconfig.js = ['https://en.dailypakistan.com.pk/wp-content/themes/century/js/pygal-tooltips.min.js']
+        # pyconfig.js = ['https://en.dailypakistan.com.pk/wp-content/themes/century/js/pygal-tooltips.min.js']
         pyconfig.legend_at_bottom=True
         pyconfig.legend_at_bottom_columns=1
-        pyconfig.stroke_style={'width': 3}
+        pyconfig.stroke_style={'width': 1}
+        pyconfig.style=RedBlueStyle
+        pyconfig.style.font_family='googlefont:Dosis:wght@200;700'
         if legend is False:
             pyconfig.show_legend = False
         else:
@@ -233,7 +238,7 @@ def chart_func(id, legend=False):
         else:
             chart.render_to_file('app/static/charts/{}.svg'.format(id))
 
-        embed = '<embed type="image/svg+xml" src="{}">'.format(xchart)
+        embed = '<object type="image/svg+xml" style="width:50%;" data="{}"></object>'.format(xchart)
 
         return embed
     else:
